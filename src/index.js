@@ -31,13 +31,12 @@ function renderToy(toyData) {
       <h2>${toyData.name}</h2>
       <img src=${toyData.image} class="toy-avatar">
         <p>${toyData.likes} Likes <p>
-          <button id="like-btn-${toyData.id}">Like <3</button>
+          <button id="like-btn-${toyData.id}" type="button">Like <3</button>
   `;
   toyCollection.appendChild(toyEl)
   toyEl.querySelector(`#like-btn-${toyData.id}`)
       .addEventListener('click', event =>
       updateToy(toyData))
-
 }
 
 function createToy(name, image) {
@@ -61,8 +60,8 @@ function updateToy(toyData) {
     headers: header,
     body: JSON.stringify(toyData)
   }).then(resp => console.log(resp.json()))
-    .then(removeAllToys())
-    .then(displayAllToys())
+    .then(removeAllToys)
+    .then(displayAllToys)
 
 }
 
