@@ -50,6 +50,17 @@ button {
   justify-self: center;
 }
 
+button.delete-button {
+  /* position: relative; */
+  background-color: black;
+  border: none;
+  border-radius: 5px;
+  /* height: max-content; */
+  width: 100%;
+  color: whitesmoke;
+  font-size: 20px;
+  justify-self: center;
+}
 button:hover {
   background-color: whitesmoke;
   border: #e04b52 solid 1px;
@@ -57,16 +68,21 @@ button:hover {
 }
 
 .container {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
   padding: 1rem;
   width: stretch;
   height: auto;
   display: none;
   background: #515DA2;
   opacity: .8;
+
 }
 
 .add-toy-form {
   width: 80%
+
 }
 
 .submit {
