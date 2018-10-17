@@ -1,19 +1,82 @@
 const addBtn = document.querySelector('#new-toy-btn')
-const toyForm = document.querySelector('.container')
+const toyFormContainer = document.querySelector('.container')
+const toyForm = document.querySelector('.add-toy-form')
+const nameInput = document.querySelector('#input-name')
+const imageInput = document.querySelector('#input-image')
+
+const toyCollection = document.querySelector("#toy-collection")
+const baseURL = 'http://localhost:3000/toys'
+const header = {
+  "Content-Type": "application/json",
+  Accept: "application/json"
+}
+
 let addToy = false
 
-// YOUR CODE HERE
+function displayAllToys() {
+  fetch(baseURL).then(resp => resp.json()).then(resp =>
+    resp.forEach(toy => renderToy(toy)))
+}
+
+function removeAllToys() {
+  while (toyCollection.firstChild) {
+    toyCollection.removeChild(toyCollection.firstChild);
+  }
+}
+
+function renderToy(toyData) {
+  toyEl = document.createElement('div');
+  toyEl.className = "card";
+  toyEl.innerHTML =`
+      <h2>${toyData.name}</h2>
+      <img src=${toyData.image} class="toy-avatar">
+        <p>${toyData.likes} Likes <p>
+          <button id="like-btn-${toyData.id}" type="button">Like <3</button>
+  `;
+  toyCollection.appendChild(toyEl)
+  toyEl.querySelector(`#like-btn-${toyData.id}`)
+      .addEventListener('click', event =>
+      updateToy(toyData))
+}
+
+function createToy(name, image) {
+  let toyObj = {
+    name,
+    image,
+    likes: 0
+  };
+  fetch(baseURL, {
+    method: 'POST',
+    headers: header,
+    body: JSON.stringify(toyObj)
+  }).then(renderToy(toyObj))
+}
+
+function updateToy(toyData) {
+  toyData.likes = toyData.likes + 1
+  console.log(toyData)
+  fetch(baseURL + `/${toyData.id}`, {
+    method: 'PUT',
+    headers: header,
+    body: JSON.stringify(toyData)
+  }).then(resp => console.log(resp.json()))
+    .then(removeAllToys)
+    .then(displayAllToys)
+
+}
+
+toyForm.addEventListener('submit', () => {
+  createToy(nameInput.value, imageInput.value)
+})
 
 addBtn.addEventListener('click', () => {
   // hide & seek with the form
   addToy = !addToy
   if (addToy) {
-    toyForm.style.display = 'block'
-    // submit listener here
+    toyFormContainer.style.display = 'block'
   } else {
-    toyForm.style.display = 'none'
+    toyFormContainer.style.display = 'none'
   }
 })
 
-
-// OR HERE!
+displayAllToys()
